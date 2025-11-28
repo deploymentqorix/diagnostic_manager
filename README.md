@@ -1,0 +1,1 @@
+# daignostic_manager
