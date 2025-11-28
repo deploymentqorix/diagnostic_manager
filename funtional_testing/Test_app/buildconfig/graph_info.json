@@ -1,0 +1,34 @@
+{
+ "options": [
+  [
+   "gtest:build_gmock",
+   "True"
+  ],
+  [
+   "gtest:disable_pthreads",
+   "False"
+  ],
+  [
+   "gtest:fPIC",
+   "True"
+  ],
+  [
+   "gtest:hide_symbols",
+   "False"
+  ],
+  [
+   "gtest:no_main",
+   "False"
+  ],
+  [
+   "gtest:shared",
+   "False"
+  ]
+ ],
+ "root": {
+  "name": "TestApp",
+  "version": "0.1",
+  "user": null,
+  "channel": null
+ }
+}

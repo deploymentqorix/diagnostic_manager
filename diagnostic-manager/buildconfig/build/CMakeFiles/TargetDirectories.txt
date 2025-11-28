@@ -1,0 +1,7 @@
+/home/l-100809/Downloads/dmr/diagnostic-manager-runtime/diagnostic-manager/buildconfig/build/CMakeFiles/diagnostic-manager.dir
+/home/l-100809/Downloads/dmr/diagnostic-manager-runtime/diagnostic-manager/buildconfig/build/CMakeFiles/edit_cache.dir
+/home/l-100809/Downloads/dmr/diagnostic-manager-runtime/diagnostic-manager/buildconfig/build/CMakeFiles/rebuild_cache.dir
+/home/l-100809/Downloads/dmr/diagnostic-manager-runtime/diagnostic-manager/buildconfig/build/CMakeFiles/list_install_components.dir
+/home/l-100809/Downloads/dmr/diagnostic-manager-runtime/diagnostic-manager/buildconfig/build/CMakeFiles/install.dir
+/home/l-100809/Downloads/dmr/diagnostic-manager-runtime/diagnostic-manager/buildconfig/build/CMakeFiles/install/local.dir
+/home/l-100809/Downloads/dmr/diagnostic-manager-runtime/diagnostic-manager/buildconfig/build/CMakeFiles/install/strip.dir
