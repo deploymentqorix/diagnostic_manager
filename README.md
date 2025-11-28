@@ -1,174 +1,204 @@
 # daignostic_manager
 
-> A modular Diagnostic Manager for vehicle/embedded systems that handles diagnostic events, DTC lifecycle, condition monitoring, and communication with diagnostic services (UDS / SOVD style workflows).
+> Runtime Diagnostic Manager implementation providing AUTOSAR-like diagnostic services, condition monitoring, event handling, and DTC management with a layered architecture.
 
 ---
 
 ## 📌 Overview
 
-daignostic_manager is designed to provide a central, scalable, and thread-safe mechanism for managing vehicle diagnostic data. It coordinates diagnostic trouble codes (DTCs), event memory, conditions, and interfaces with diagnostic communication layers to support monitoring, reporting, and clearing of faults.
+The **daignostic_manager** project implements a structured runtime diagnostic framework inspired by AUTOSAR Adaptive diagnostics. It includes core diagnostic entities such as Conditions, Events, Operation Cycles, Monitors, and DTC Information, along with shared ara::core utilities like `InstanceSpecifier` and `Result/Future`.
 
-This project is suitable for AUTOSAR-based or AUTOSAR-inspired platforms and modern SDV (Software Defined Vehicle) architectures.
+This layout clearly separates:
 
----
-
-## ✨ Key Features
-
-* ✅ Centralized Diagnostic Trouble Code (DTC) management
-* ✅ Event memory with circular buffer support
-* ✅ Condition-based diagnostic triggering
-* ✅ Thread-safe architecture
-* ✅ Configurable overflow and retention policies
-* ✅ Diagnostic session and request handling support
-* ✅ Compatible with UDS / ISO 14229 diagnostic concepts
-* ✅ Extensible API structure
+* AUTOSAR diagnostic API layer (`ara-diag`)
+* Diagnostic manager implementation (`diagnostic-manager`)
+* Build configurations and runtime structure
 
 ---
 
-## 📂 Project Structure
+## 📂 Actual Project Structure
 
 ```
-daignostic_manager/
+DIAGNOSTIC-MANAGER-RUNTIME/
 │
-├── include/
-│   ├── core/
-│   │   ├── DtcManager.hpp
-│   │   ├── EventMemory.hpp
-│   │   ├── Condition.hpp
-│   │   └── DiagnosticInterface.hpp
-│   │
-│   └── utils/
-│       └── Logger.hpp
+├── .history/
+├── .vscode/
 │
-├── src/
-│   ├── DtcManager.cpp
-│   ├── EventMemory.cpp
-│   └── Condition.cpp
+├── ara-diag/
+│   ├── buildconfig/
+│   └── dev/
+│       ├── inc/
+│       │   ├── private/
+│       │   └── public/ara/
+│       │       ├── core/
+│       │       │   ├── instance_specifier.h
+│       │       │   └── result_future.h
+│       │       └── diag/
+│       │           ├── condition.h
+│       │           ├── dtc_information.h
+│       │           ├── event_types.h
+│       │           ├── event.h
+│       │           ├── monitor_types.h
+│       │           ├── monitor.h
+│       │           └── operation_cycle.h
+│       └── src/
+│           ├── condition.cpp
+│           ├── dtc_information.cpp
+│           ├── event.cpp
+│           ├── monitor.cpp
+│           └── operation_cycle.cpp
 │
-├── tests/
-│   └── unit/
+├── diagnostic-manager/
+│   ├── buildconfig/
+│   └── dev/
+│       ├── inc/
+│       │   ├── ara/core/
+│       │   │   ├── instance_specifier.h
+│       │   │   └── result_future.h
+│       │   ├── common/
+│       │   ├── dtc/
+│       │   │   └── dm_dtc.h
+│       │   ├── event/
+│       │   │   └── dm_event.h
+│       │   ├── lib/
+│       │   └── operationcycle/
+│       └── src/
+│           ├── common/
+│           ├── dtc/
+│           │   └── dm_dtc.cpp
+│           ├── event/
+│           │   └── dm_event.cpp
+│           ├── lib/
+│           ├── operationcycle/
+│           │   └── dm_operation_cycle.cpp
+│           └── main.cpp
 │
-├── CMakeLists.txt
+├── functional_testing/
+│   └── Test_app/
+│       ├── buildconfig/
+│       ├── inc/
+│       │   └── app.h
+│       └── src/
+│           ├── app.cpp
+│           ├── test.cpp
+│           └── test_diag.cpp
+│
 └── README.md
 ```
 
 ---
 
-## ⚙️ Core Components
+## 🧩 Module Breakdown
 
-### 1. DtcManager
+### ara-diag Layer (AUTOSAR Diagnostic API)
 
-Handles DTC creation, status updates, storage, and clearing logic. Ensures compliance with diagnostic life-cycle rules.
+This section defines the standardized diagnostic interfaces.
 
-### 2. EventMemory
+* **core/**
 
-Thread-safe circular buffer storing diagnostic events with FIFO / overflow handling policies.
+  * `instance_specifier.h` – Identifies diagnostic elements uniquely
+  * `result_future.h` – Result handling with Future/Promise semantics
 
-### 3. Condition
+* **diag/**
 
-Defines logical diagnostic conditions for triggering events based on system state.
+  * `condition.h` – Defines diagnostic conditions
+  * `dtc_information.h` – DTC metadata and attributes
+  * `event.h` & `event_types.h` – Diagnostic event definitions
+  * `monitor.h` & `monitor_types.h` – Diagnostic monitor interfaces
+  * `operation_cycle.h` – Operation cycle handling
 
-### 4. Diagnostic Interface
+Source files implement their runtime behavior under `src/`.
 
-Provides communication hooks for diagnostic servers such as DCM or remote diagnostic layers.
+---
+
+### diagnostic-manager Layer (Implementation Layer)
+
+This layer provides project-specific logic wrapping AUTOSAR-like APIs.
+
+* **dtc/**
+
+  * `dm_dtc.h` – Core DTC management logic
+
+* **event/**
+
+  * `dm_event.h` – Event management and propagation
+
+* **operationcycle/**
+
+  * Runtime handling of operation cycle change logic
+
+* **common/**
+
+  * Shared utility definitions
+
+---
+
+## ⚙️ Core Functionalities
+
+* Diagnostic Condition evaluation
+* Event reporting and lifecycle handling
+* DTC registration, update and clearing
+* Monitor execution and state tracking
+* Operation cycle management
+* AUTOSAR-style Result/Future based APIs
 
 ---
 
 ## 🔧 Build Instructions
 
-### Prerequisites
-
-* CMake 3.10+
-* GCC / Clang supporting C++17
-
-### Build Steps
-
 ```bash
-git clone <repository-url>
-cd daignostic_manager
-mkdir build && cd build
-cmake ..
-make
+cd DIAGNOSTIC-MANAGER-RUNTIME
+cd buildconfg
+conan create .
 ```
 
 ---
 
-## 🚀 Usage Example
+## 🚀 Example Usage
 
 ```cpp
-#include "DtcManager.hpp"
+ara::diag::Event myEvent("EngineOverheat");
+myEvent.ReportFailed();
+```
 
-int main() {
-    core::DtcManager manager;
-    manager.registerDtc(0x1234);
-    manager.setDtcStatus(0x1234, true);
-    return 0;
-}
+```cpp
+ara::diag::OperationCycle cycle("IgnitionCycle");
+cycle.StartCycle();
 ```
 
 ---
 
-## 🧪 Testing
+## ✅ Design Goals
 
-Run unit tests with:
-
-```bash
-ctest --verbose
-```
-
----
-
-## 📖 Configuration
-
-Configuration can be managed via JSON / YAML files or compile-time parameters depending on the deployment needs.
-
-Example parameters:
-
-* Max DTC Count
-* Event Memory Capacity
-* Overflow Policy
-* Diagnostic Session Type
+* AUTOSAR Adaptive compatibility
+* High modularity
+* Reusability across SDV platforms
+* Clear separation of interface & implementation
+* Maintainable diagnostics runtime
 
 ---
 
-## 🔐 Thread Safety
+## 🛠 Planned Enhancements
 
-All core modules are designed to be thread-safe using mutex locking and atomic operations where required.
-
----
-
-## 🛠 Future Enhancements
-
-* Web-based Diagnostic Dashboard
-* Cloud telemetry integration
-* AI-based predictive diagnostics
-* Remote OTA diagnostic updates
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Open a pull request
+* Integration with remote diagnostics service
+* Persistent fault storage
+* Diagnostic CLI tool
+* REST API interface for monitoring
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+MIT License
 
 ---
 
-## 📬 Contact
+## 👤 Author
 
-For suggestions or issues:
-
-* Author: Nikhil
-* Email: [nikhilydav1791@gmail.com]
-* Project: daignostic_manager
+Nikhil Yadav
+Project: daignostic_manager
+Type: Diagnostic Runtime Framework for SDV systems
 
 ---
 
-> Built for reliability, scalability, and modern automotive diagnostic systems 🚗⚙️
+If you want this README exported as a file or enhanced with diagrams / badges, just tell me.
